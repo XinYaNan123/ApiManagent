@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "vue@2.6.11",
+      "destination": "wwwroot/vue"
+    },
+    {
+      "library": "element-ui@2.13.2",
+      "destination": "wwwroot/element-ui/"
+    },
+    {
+      "library": "layui@2.5.6",
+      "destination": "wwwroot/layui/"
+    }
+  ]
+}

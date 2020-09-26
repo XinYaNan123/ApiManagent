@@ -1,0 +1,118 @@
+﻿@{
+    ViewData["Title"] = "接口说明";
+}
+@section Style{
+    <link href="~/element-ui/theme-chalk/index.css" rel="stylesheet" />
+    <link href="~/css/Index.css" rel="stylesheet" />
+}
+@section Scripts{
+    <script src="~/element-ui/index.js"></script>
+    <script type="text/javascript" src="https://chttps.pccoo.cn/wap/WebApp/js/extfun/ExtFuncV2.js"></script>
+    <script src="~/js/index.js"></script>
+    <script type="text/javascript">
+
+    </script>
+}
+<div id="vm">
+    <el-container>
+        <el-header style="text-align:right">
+            <div style="height:100%;line-height:100%">
+                <template v-if="UserEntity">
+                    <el-avatar :src="UserEntity.UserFace" style="margin-top:9px" :size="50" :alt="UserEntity.UserName" :title="UserEntity.UserName"></el-avatar>
+                    <el-dropdown style="top:-21px" @@command="onDropdownClick">
+                        <el-button type="primary">
+                            个人中心<i class="el-icon-arrow-down el-icon--right"></i>
+                        </el-button>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item command="onDomainWindow">更改接口域</el-dropdown-item>
+                            <el-dropdown-item command="onOutLogin">退出</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </template>
+                <template v-else="">
+                    <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" style="margin-top:9px" alt="未登入" @@click.native="onOpenLoginWindow()"></el-avatar>
+                </template>
+            </div>
+        </el-header>
+        <el-container>
+            <el-aside style="text-align:left;" width="200px">
+                <el-menu class="el-menu-vertical-demo"  style="background-color: #eef1f6">
+                    <el-submenu v-for="item_Project in ProjectList" :index="item_Project.Id.toString()">
+                        <template slot="title">
+                            <i class="el-icon-location"></i>
+                            {{item_Project.Title}}({{item_Project.ApiDetails.length}})
+                        </template>
+                        <el-menu-item 
+                                      v-for="item_Dateil in item_Project.ApiDetails" 
+                                      :index="item_Project.Id+'_'+item_Dateil.Id" 
+                                      :title="item_Dateil.Title" style="font-size:12px;text-align:left;height:30px;line-height:30px" 
+                                      @@click="onMenuClick(item_Dateil)">{{item_Dateil.Title}}</el-menu-item>
+                    </el-submenu>
+                </el-menu>
+            </el-aside>
+            <el-main style="">
+                <el-tabs  type="card" v-model="View_Variable.TabId"  :closable="true">
+                    <el-tab-pane v-for="(item, index) in IframeProjectList"
+                                 :key="item.Id"
+                                 :label="item.Title"
+                                 :name="item.Id.toString()">
+                        <el-form class="demo-form-inline">
+                            @*<el-row>
+                                <el-col :span="2"><div class="grid-content bg-purple">111111111</div></el-col>
+                                <el-col :span="22"><div class="grid-content bg-purple-light">11111111111</div></el-col>
+                            </el-row>*@
+                            <ul class="apide">
+                                <li>
+                                    <span>接口名称：</span>
+                                    <span>{{item.Title}}</span>
+                                </li>
+                                <li>
+                                    <span>接口描述：</span>
+                                    <span>{{item.Describe}}</span>
+                                </li>
+                                
+                                <li>
+                                    <span>SN：</span>
+                                    <span>{{item.SwitchName}}</span>
+                                </li>
+                                <li>
+                                    <span>请求方式：</span>
+                                    <span>{{item.State|ApiState}}</span>
+                                </li>
+                                <li>
+                                    <span>接口URL：</span>
+                                    <span>{{item.Path}}</span>
+                                </li>
+                            </ul>
+
+                        </el-form>
+
+                    </el-tab-pane>
+                </el-tabs>
+            </el-main>
+        </el-container>
+    </el-container>
+
+    <el-dialog title="登 入" :visible.sync="View_LoginWindow" width="30%">
+        <el-form :model="UserLoginEntity" ref="UserLoginEntity" :rules="rules">
+            <el-form-item label="登入账号">
+                <el-input v-model.number="UserLoginEntity.Account"></el-input>
+            </el-form-item>
+            <el-form-item label="登入密码">
+                <el-input v-model.number="UserLoginEntity.Pwd" type="password"></el-input>
+            </el-form-item>
+
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @@click="onLogin('UserLoginEntity')">登入</el-button>
+        </span>
+    </el-dialog>
+    <el-dialog title="设置接口域" :visible.sync="View_SetDomainWindow" width="30%">
+        <el-select placeholder="请选择接口域" v-model="UserLoginEntity.DomainId">
+            <el-option :label="item.Title" :value="item.Id" v-for="item in DomainList"></el-option>
+        </el-select>
+        <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @@click="onGetProjectList(UserLoginEntity.DomainId)">确认</el-button>
+        </span>
+    </el-dialog>
+</div>

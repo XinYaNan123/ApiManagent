@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]-ApiManagent</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    @RenderSection("Style", required: false)
+</head>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/vue/vue.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
